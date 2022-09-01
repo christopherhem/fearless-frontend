@@ -9,7 +9,11 @@ from .models import Conference, Location, State
 
 class LocationListEncoder(ModelEncoder):
     model = Location
-    properties = ["name", "picture_url",]
+    properties = [
+        "name", 
+        "picture_url", 
+        "id",
+    ]
 
 
 class LocationDetailEncoder(ModelEncoder):
@@ -96,7 +100,7 @@ def api_list_conferences(request):
             safe=False,
         )
 
-
+@require_http_methods(["DELETE", "GET", "PUT"])
 def api_show_conference(request, pk):
     """
     Returns the details for the Conference model specified
@@ -122,16 +126,41 @@ def api_show_conference(request, pk):
         }
     }
     """
-    conference = Conference.objects.get(id=pk)
-    weather = get_weather_data(
-        conference.location.city,
-        conference.location.state.abbreviation,
-    )
-    return JsonResponse(
-        {"conference": conference, "weather": weather},
-        encoder=ConferenceDetailEncoder,
-        safe=False,
-    )
+    if request.method == "GET":
+        conference = Conference.objects.get(id=pk)
+        weather = get_weather_data(
+            conference.location.city,
+            conference.location.state.abbreviation,
+        )
+        return JsonResponse(
+            {"conference": conference, "weather": weather},
+            encoder=ConferenceDetailEncoder,
+            safe=False,
+        )
+    elif request.method == "DELETE":
+        count, _ = Conference.objects.filter(id=pk).delete()
+        return JsonResponse({"deleted": count > 0})
+    else:
+        content = json.loads(request.body)
+        try:
+            try:
+                if "location" in content:
+                    location = Location.objects.get(id=content["location"])
+                    content["location"] = location
+            except Location.DoesNotExist:
+                return JsonResponse(
+                    {"message": "Invalid location id"}, status=400
+                )
+            Conference.objects.filter(id=pk).update(**content)
+            conference = Conference.objects.get(id=pk)
+            return JsonResponse(
+                conference,
+                encoder=ConferenceDetailEncoder,
+                safe=False,
+            )
+        except Conference.DoesNotExist:
+            return JsonResponse({"message": "Invalid Conference id"})
+
 
 
 @require_http_methods(["GET", "POST"])
