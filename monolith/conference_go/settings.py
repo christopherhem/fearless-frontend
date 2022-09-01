@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "events.apps.EventsConfig",
     "presentations.apps.PresentationsConfig",
     "corsheaders",
+    "djwto",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -50,6 +51,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+DJWTO_MODE = "TWO-COOKIES"
+DJWTO_ACCESS_TOKEN_LIFETIME = None
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
