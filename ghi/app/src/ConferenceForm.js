@@ -30,8 +30,6 @@ class ConferenceForm extends React.Component {
         delete data.maxPresentations;
         delete data.maxAttendees;
         delete data.locations;
-        console.log("HEREEEE DUDE")
-        console.log(data)
 
         const conferenceUrl = 'http://localhost:8000/api/conferences/';
         const fetchConfig ={
