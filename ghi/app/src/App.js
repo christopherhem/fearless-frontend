@@ -8,6 +8,7 @@ import ConferenceForm from './ConferenceForm';
 import AttendConferenceForm from './AttendConferenceForm';
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import PresentationForm from './PresentationForm';
+import MainPage from './MainPage';
 
 function App(props) {
   if (props.attendees === undefined) {
@@ -18,17 +19,19 @@ function App(props) {
       <BrowserRouter>
         <Nav />
         <div className="container">
-        <PresentationForm />
+          {/* <PresentationForm /> */}
           {/* <LocationForm /> */}
           {/* <ConferenceForm /> */}
           {/* <AttendConferenceForm /> */}
           {/* <AttendeesList attendees={props.attendees} /> */}
-          {/* <Routes>
+          <Routes>
+            <Route path ="index" element={<MainPage />}/>
             <Route path ="/locations/new" element={<LocationForm />}/>
             <Route path ="/conferences/new" element={<ConferenceForm />}/>
             <Route path ="/attendees/new" element={<AttendConferenceForm />}/>
             <Route path ="/attendees" element={<AttendeesList attendees={props.attendees} />}/>
-          </Routes> */}
+            <Route path ="/presentations/new" element={<PresentationForm />}/>
+          </Routes>
         </div>
       </BrowserRouter> 
     </React.Fragment>

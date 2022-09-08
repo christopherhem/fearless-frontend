@@ -22,8 +22,7 @@ class LocationForm extends React.Component {
         data.room_count = data.roomCount;
         delete data.roomCount;
         delete data.states;
-        console.log(data);
-
+    
         const locationUrl = 'http://localhost:8000/api/locations/';
         const fetchConfig ={
             method: "post",
@@ -35,7 +34,6 @@ class LocationForm extends React.Component {
         const response = await fetch(locationUrl, fetchConfig);
         if (response.ok) {
             const newLocation = await response.json();
-            console.log(newLocation);
 
             const cleared = {
                 name: '',
